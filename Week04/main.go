@@ -4,12 +4,12 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"config"
-	"endpoint"
-	"plugins"
-	"github.com/danry18/GoLearn/Week04/service/service"
-	"github.com/longjoy/micro-go-book/ch6-discovery/string-service/transport"
-	"github.com/longjoy/micro-go-book/common/discover"
+	"./config"
+	"./endpoint"
+	"./plugins"
+	"./service"
+	"./transport"
+	"./discover"
 	uuid "github.com/satori/go.uuid"
 	"net/http"
 	"os"
@@ -20,9 +20,9 @@ import (
 
 func main() {
 
-	// 获取命令行参数
+	// 命令行参数，Consul做注册服务器
 	var (
-		servicePort = flag.Int("service.port", 10085, "service port")
+		servicePort = flag.Int("service.port", 10086, "service port")
 		serviceHost = flag.String("service.host", "127.0.0.1", "service host")
 		consulPort = flag.Int("consul.port", 8500, "consul port")
 		consulHost = flag.String("consul.host", "127.0.0.1", "consul host")
@@ -42,7 +42,7 @@ func main() {
 
 	}
 	var svc service.Service
-	svc = service.StringService{}
+	svc = service.LoginService{}
 	// add logging middleware
 	svc = plugins.LoggingMiddleware(config.KitLogger)(svc)
 
@@ -87,4 +87,3 @@ func main() {
 	discoveryClient.DeRegister(instanceId, config.Logger)
 	config.Logger.Println(error)
 }
-
